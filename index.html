@@ -122,25 +122,33 @@
                 <button id="yesBtn">¡Sí, claro!</button>
                 <button style="opacity: 0; pointer-events: none;">No</button> 
             </div>
+            <p id="joke-msg" style="opacity: 0; color: #888; font-style: italic; margin-top: 15px; transition: opacity 0.5s;">
+                ¿Ah, le querías dar al "No"? 😏 Jajaja
+            </p>
         </div>
 
         <div id="success-screen">
-            <h1>¡VAMOOOS! 💙😍</h1>
+            <h1>¡SIUUUUUUUUUUU! 💙😍</h1>
             <p>Sabía que tomarías la decisión correcta 😎.</p>
-            <p>Paso por ti a las 8:00 PM.</p>
+            <p>Paso por ti a las 6:00 PM.</p>
             
-            <img id="meme-img" src="https://i.pinimg.com/originals/90/c7/24/90c724392451d6c8e5450df4723049b4.jpg" alt="Meme victoria">
+            <video id="celebration-video" width="100%" muted playsinline style="border-radius: 10px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); pointer-events: none;">
+                <source src="./video_final.mp4" type="video/mp4">
+            </video>
         </div>
     </div>
 
     <button id="noBtn">No</button>
 
 <script>
+    const startSecond = 2;
+    const endSecond = 4;
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
     const questionScreen = document.getElementById('question-screen');
     const successScreen = document.getElementById('success-screen');
-
+    const video = document.getElementById('celebration-video');
+    const jokeMsg = document.getElementById('joke-msg');
     // Lógica para que el botón se mueva
     // Usamos 'mouseover' para PC y 'touchstart' para celular (aunque en celular es difícil de atrapar jaja)
     function moveButton() {
@@ -155,6 +163,8 @@
 
         noBtn.style.left = newX + 'px';
         noBtn.style.top = newY + 'px';
+
+        jokeMsg.style.opacity = '1';
     }
 
     noBtn.addEventListener('mouseover', moveButton);
@@ -173,13 +183,22 @@
     window.onload = alignButtons;
     window.addEventListener('resize', alignButtons);
 
+    video.addEventListener('timeupdate', function() {
+        if (this.currentTime >= endSecond) {
+            this.currentTime = startSecond; // Vuelve al inicio del recorte
+            this.play();
+        }
+    });
+
     // Lógica del botón Sí
     yesBtn.addEventListener('click', () => {
         questionScreen.style.display = 'none'; // Oculta la pregunta
         noBtn.style.display = 'none';          // Oculta el botón rebelde
         successScreen.style.display = 'block'; // Muestra el éxito
         
-        // Opcional: Lanzar confeti si quieres complicarte más, pero con esto basta
+        video.currentTime = startSecond;
+        video.play();
+        
     });
 
 </script>
