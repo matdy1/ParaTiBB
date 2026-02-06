@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti 💙</title>
+    <style>
+        /* ESTILOS GENERALES */
+        body {
+            margin: 0;
+            padding: 0;
+            /* Degradado Rosado a Azul (su favorito) */
+            background: linear-gradient(135deg, #ffc3a0 0%, #90e0ef 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Para que no haya scroll cuando el botón se mueva */
+        }
+
+        /* LA TARJETA CENTRAL */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative; /* Necesario para contener elementos absolutos si quisieras */
+        }
+
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* GIF O IMAGEN INICIAL (Opcional, puedes poner uno tierno) */
+        .gif-container img {
+            width: 150px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* CONTENEDOR DE BOTONES */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* ESTILO DE LOS BOTONES */
+        button {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: bold;
+        }
+
+        /* Botón SÍ: Azul (su color) */
+        #yesBtn {
+            background-color: #0077b6; /* Azul fuerte */
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+        }
+        #yesBtn:hover {
+            transform: scale(1.1);
+            background-color: #023e8a;
+        }
+
+        /* Botón NO: Rosado (el que huye) */
+        #noBtn {
+            background-color: #ffb3c1;
+            color: #c9184a;
+            position: absolute; /* CLAVE para poder moverlo libremente */
+            transition: all 0.2s ease; /* Suaviza el movimiento */
+        }
+
+        /* PANTALLA DE ÉXITO (Oculta al principio) */
+        #success-screen {
+            display: none;
+        }
+        
+        #success-screen h1 {
+            color: #0077b6; /* Azul de éxito */
+        }
+        
+        /* Imagen del meme final */
+        #meme-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="question-screen">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3RxeGp6bXFqbndqMzB3eXF6eXF6eXF6eXF6eXF6eXF6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute gif">
+            </div>
+            
+            <h1>Hey Kat 💙</h1>
+            <p>Tengo una pregunta importante...</p>
+            <p style="font-weight: bold; font-size: 1.3rem;">¿Quieres ser mi San Valentín?</p>
+
+            <div class="btn-container">
+                <button id="yesBtn">¡Sí, claro!</button>
+                <button style="opacity: 0; pointer-events: none;">No</button> 
+            </div>
+        </div>
+
+        <div id="success-screen">
+            <h1>¡VAMOOOS! 💙😍</h1>
+            <p>Sabía que tomarías la decisión correcta 😎.</p>
+            <p>Paso por ti a las 8:00 PM.</p>
+            
+            <img id="meme-img" src="https://i.pinimg.com/originals/90/c7/24/90c724392451d6c8e5450df4723049b4.jpg" alt="Meme victoria">
+        </div>
+    </div>
+
+    <button id="noBtn">No</button>
+
+<script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const questionScreen = document.getElementById('question-screen');
+    const successScreen = document.getElementById('success-screen');
+
+    // Lógica para que el botón se mueva
+    // Usamos 'mouseover' para PC y 'touchstart' para celular (aunque en celular es difícil de atrapar jaja)
+    function moveButton() {
+        // Obtenemos el tamaño de la ventana
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // Calculamos una posición random nueva
+        // Restamos el tamaño del botón (aprox 100px) para que no se salga de la pantalla
+        const newX = Math.random() * (width - 100);
+        const newY = Math.random() * (height - 50);
+
+        noBtn.style.left = newX + 'px';
+        noBtn.style.top = newY + 'px';
+    }
+
+    noBtn.addEventListener('mouseover', moveButton);
+    noBtn.addEventListener('click', moveButton); // Por si acaso logra clickearlo rápido
+
+    // Posicionar el botón "No" inicialmente junto al "Sí"
+    // Esto es un pequeño truco de JS para alinearlo al cargar
+    function alignButtons() {
+        const yesBtnRect = yesBtn.getBoundingClientRect();
+        noBtn.style.position = 'absolute';
+        noBtn.style.left = (yesBtnRect.right + 20) + 'px';
+        noBtn.style.top = yesBtnRect.top + 'px';
+    }
+
+    // Ejecutar alineación al cargar y al redimensionar
+    window.onload = alignButtons;
+    window.addEventListener('resize', alignButtons);
+
+    // Lógica del botón Sí
+    yesBtn.addEventListener('click', () => {
+        questionScreen.style.display = 'none'; // Oculta la pregunta
+        noBtn.style.display = 'none';          // Oculta el botón rebelde
+        successScreen.style.display = 'block'; // Muestra el éxito
+        
+        // Opcional: Lanzar confeti si quieres complicarte más, pero con esto basta
+    });
+
+</script>
+</body>
+</html>
